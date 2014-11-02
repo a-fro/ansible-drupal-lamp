@@ -4,3 +4,9 @@ a-fro.dev
 [staging]
 stage.a-fro.com
 
+[production]
+a-fro.com
+
+[droplets:children]
+staging
+production
