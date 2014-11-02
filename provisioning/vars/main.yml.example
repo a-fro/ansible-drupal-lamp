@@ -6,6 +6,8 @@ firewall_allowed_tcp_ports:
   - "80"
 
 # The core version you want to use (e.g. 6.x, 7.x, 8.0.x).
+# a-fro note: this is slightly deceptive b/c it's really
+# used to checkout the correct branch
 drupal_core_version: "master"
 
 # The path where Drupal will be downloaded and installed.
