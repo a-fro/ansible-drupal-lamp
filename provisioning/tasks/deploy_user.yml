@@ -1,0 +1,24 @@
+---
+- name: Ensure admin group exists.
+  group: name=admin state=present
+
+- name: Add deployment user
+  user: name='{{ deploy_user }}'
+        state=present
+        groups="sudo,admin"
+        shell=/bin/bash
+
+- name: Create .ssh folder with correct permissions.
+  file: >
+    path="/home/{{ deploy_user }}/.ssh/"
+    state=directory
+    owner="{{ deploy_user }}"
+    group=admin
+    mode=700
+
+- name: Add authorized deploy key
+  authorized_key: user="{{ deploy_user }}"
+                  key="{{ lookup('file', '~/.ssh/ikon.pub') }}"
+                  path="/home/{{ deploy_user }}/.ssh/authorized_keys"
+                  manage_dir=no
+  remote_user: "{{ deploy_user }}"

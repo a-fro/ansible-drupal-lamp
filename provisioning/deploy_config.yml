@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  sudo: yes
+
+  vars_files:
+    - vars/main.yml
+    - vars/deploy_config.yml
+
+  pre_tasks:
+    - include: tasks/deploy_user.yml
+
+  roles:
+    - security
