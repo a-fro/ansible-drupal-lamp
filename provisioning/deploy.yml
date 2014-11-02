@@ -1,0 +1,26 @@
+---
+- hosts: all
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Check out the repository.
+      git: >
+        repo='git@github.com:a-fro/a-fro.com.git'
+        version='master'
+        accept_hostkey=yes
+        dest=/var/www/{{ drupal_domain }}
+      sudo: no
+
+    - name: Clear cache on D8
+      command:
+        chdir={{ drupal_core_path }}
+        drush cr
+      when: drupal_major_version == 8
+
+    - name: Clear cache on D6/7
+      command:
+        chdir={{ drupal_core_path }}
+        drush cc all
+      when: drupal_major_version < 8
