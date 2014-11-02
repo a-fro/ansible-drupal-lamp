@@ -30,12 +30,29 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :virtualbox do |vb|
     # Set the RAM for this VM to 512M.
     vb.customize ["modifyvm", :id, "--memory", "512"]
+    vb.customize ["modifyvm", :id, "--name", "a-fro.dev"]
   end
 
   # Enable provisioning with Ansible.
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "provisioning/playbook.yml"
+    ansible.inventory_path = "provisioning/inventory"
     ansible.sudo = true
-    # ansible.raw_arguments = ['-vvv']
+    # ansible.raw_arguments = ['-vvvv']
+    ansible.sudo = true
+    ansible.limit = 'dev'
+
+    initialized = false
+
+    if initialized
+      play = 'playbook'
+      ansible.extra_vars = { ansible_ssh_private_key_file: '~/.ssh/ikon' }
+    else
+      play = 'deploy_config'
+      ansible.extra_vars = {
+        ansible_ssh_user: 'vagrant',
+        ansible_ssh_private_key_file: '~/.vagrant.d/insecure_private_key'
+      }
+    end
+    ansible.playbook = "provisioning/#{play}.yml"
   end
 end
