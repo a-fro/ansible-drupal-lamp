@@ -24,5 +24,6 @@
     - geerlingguy.php-mysql
     - geerlingguy.composer
     - geerlingguy.drush
+    - drupal
 
   tasks:
