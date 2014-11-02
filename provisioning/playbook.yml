@@ -1,28 +1,28 @@
 ---
-# Simple Drupal Development VM Playbook for Ubuntu 12.04
+# Ansible playbook for a Drupal LAMP server.
 #
-# This playbook will install Drupal on an Ubuntu-based LAMP stack, along with
-# drush, composer, and other relevant utilities.
-#
-# @author Jeff Geerling, 2014
 
 - hosts: all
+  gather_facts: yes
+  sudo: yes
 
   vars_files:
-  - vars/main.yml
+    - vars/main.yml
 
   pre_tasks:
-  - include: tasks/init.yml
+    - include: tasks/init.yml
 
   roles:
     - geerlingguy.git
-    - geerlingguy.apache
+    - geerlingguy.firewall
+    - security
+    - geerlingguy.ntp
+    - geerlingguy.postfix
     - geerlingguy.mysql
+    - geerlingguy.apache
     - geerlingguy.php
     - geerlingguy.php-mysql
     - geerlingguy.composer
     - geerlingguy.drush
 
   tasks:
-    - include: tasks/www.yml
-    - include: tasks/drupal.yml
