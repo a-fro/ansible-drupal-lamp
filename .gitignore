@@ -1,3 +1,5 @@
 .DS_Store
 .vagrant/
-vagrant_ansible_inventory_default
+provisioning/vars/main.yml
+provisioning/group_vars/all
+provisioning/group_vars/droplets
