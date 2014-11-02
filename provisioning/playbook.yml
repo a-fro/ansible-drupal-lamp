@@ -27,3 +27,5 @@
     - drupal
 
   tasks:
+    - include: tasks/swap.yml
+      when: not vagrant
