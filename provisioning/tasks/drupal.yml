@@ -1,0 +1,76 @@
+---
+- name: Create Drupal database.
+  mysql_db: >
+    db={{ drupal_mysql_database }}
+    state=present
+
+- name: Create a MySQL user for Drupal.
+  mysql_user: >
+    name={{ drupal_mysql_user }}
+    host={{ item }}
+    priv={{ drupal_mysql_database }}.*:ALL
+    password={{ drupal_mysql_password }}
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: Remove default virtualhost file.
+  file: >
+    path=/etc/apache2/sites-enabled/000-default
+    state=absent
+  notify: restart webserver
+
+- name: Check if Drupal is already present.
+  stat: >
+    path={{ drupal_core_path }}
+  register: drupal_site
+
+- name: Clone the repo if it doesn't exist
+  git: >
+    repo={{drupal_repo_url}}
+    version='master'
+    accept_hostkey=yes
+    dest=/var/www/{{ drupal_domain }}
+    force=yes
+  when: drupal_site.stat.exists == false
+  sudo: no
+
+- name: Check if Drupal is already installed.
+  stat: >
+    path="{{ drupal_core_path }}/sites/default/settings.php"
+  register: drupal_installed
+
+- name: Set permissions properly on default folder.
+  file: >
+    path={{ drupal_core_path }}/sites/default
+    mode=777
+    state=directory
+
+- name: Install Drupal (standard profile) with drush.
+  command: >
+    drush si -y
+    --site-name="{{ drupal_site_name }}"
+    --account-name={{ drupal_admin }}
+    --account-pass={{ drupal_admin_password }}
+    --db-url=mysql://{{ drupal_mysql_user }}:{{ drupal_mysql_password }}@localhost/{{ drupal_mysql_database }}
+    chdir={{ drupal_core_path }}
+  notify: restart webserver
+  when: drupal_installed.stat.exists == false
+
+- name: Copy the css files
+  copy: src={{ drupal_css_path }} dest={{ drupal_theme_path }}
+  when: drupal_site.stat.exists == false
+
+# SEE: https://drupal.org/node/2121849#comment-8413637
+- name: Set permissions properly on settings.php.
+  file: >
+    path={{ drupal_core_path }}/sites/default/settings.php
+    mode=744
+
+- name: Set permissions properly on files directory.
+  file: >
+    path={{ drupal_core_path }}/sites/default/files
+    mode=777
+    state=directory
+    recurse=yes
