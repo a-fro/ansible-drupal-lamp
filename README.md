@@ -6,8 +6,8 @@ It current includes the following Ansible roles created by [Jeff Geerling](https
 
   - [geerlingguy.firewall](https://github.com/geerlingguy/ansible-role-firewall)
   - [geerlingguy.ntp](https://github.com/geerlingguy/ansible-role-ntp)
-  - [geerlingguy.repo-epel](https://github.com/geerlingguy/ansible-role-epel)
-  - [geerlingguy.repo-remi](https://github.com/geerlingguy/ansible-role-remi)
+  - [geerlingguy.repo-epel](https://github.com/geerlingguy/ansible-role-repo-epel)
+  - [geerlingguy.repo-remi](https://github.com/geerlingguy/ansible-role-repo-remi)
   - [geerlingguy.postfix](https://github.com/geerlingguy/ansible-role-postfix)
   - [geerlingguy.mysql](https://github.com/geerlingguy/ansible-role-mysql)
   - [geerlingguy.apache](https://github.com/geerlingguy/ansible-role-apache)
