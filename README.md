@@ -4,6 +4,7 @@ This project builds on the [Drupal Dev VM](https://github.com/geerlingguy/drupal
 
 It current includes the following Ansible roles created by [Jeff Geerling](https://galaxy.ansible.com/list#/users/219):
 
+  - [geerlingguy.git](https://github.com/geerlingguy/ansible-role-git)
   - [geerlingguy.firewall](https://github.com/geerlingguy/ansible-role-firewall)
   - [geerlingguy.ntp](https://github.com/geerlingguy/ansible-role-ntp)
   - [geerlingguy.repo-epel](https://github.com/geerlingguy/ansible-role-repo-epel)
